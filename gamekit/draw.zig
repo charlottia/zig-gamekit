@@ -52,8 +52,17 @@ pub const draw = struct {
         var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = scale, .sy = scale });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
+
     pub fn texScaleXY(texture: Texture, position: math.Vec2, sx: f32, sy: f32) void {
         quad.setFill(texture.width, texture.height);
+
+        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy });
+        batcher.draw(texture, quad, mat, math.Color.white);
+    }
+
+    pub fn texScaleXYRegion(texture: Texture, position: math.Vec2, region: math.Rect, sx: f32, sy: f32) void {
+        quad.setFill(texture.width, texture.height);
+        quad.setViewportRect(region);
 
         var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy });
         batcher.draw(texture, quad, mat, math.Color.white);
