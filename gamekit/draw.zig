@@ -60,11 +60,11 @@ pub const draw = struct {
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
-    pub fn texScaleXYRegion(texture: Texture, position: math.Vec2, region: math.Rect, sx: f32, sy: f32) void {
+    pub fn texScaleXYRegionAngle(texture: Texture, position: math.Vec2, region: math.Rect, sx: f32, sy: f32, angle: f32) void {
         quad.setFill(texture.width, texture.height);
         quad.setViewportRect(region);
 
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy });
+        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy, .angle = angle });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
