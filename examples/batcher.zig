@@ -98,8 +98,8 @@ fn shutdown() !void {
 
 fn update() !void {
     const size = gk.window.size();
-    const win_w = @intToFloat(f32, size.w);
-    const win_h = @intToFloat(f32, size.h);
+    const win_w = @floatFromInt(f32, size.w);
+    const win_h = @floatFromInt(f32, size.h);
 
     if (@mod(gk.time.frames(), 500) == 0) std.debug.print("fps: {d}\n", .{gk.time.fps()});
 

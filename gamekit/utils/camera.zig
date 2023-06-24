@@ -12,8 +12,8 @@ pub const Camera = struct {
 
     pub fn transMat(self: Camera) math.Mat32 {
         const size = gk.window.size();
-        const half_w = @intToFloat(f32, size.w) * 0.5;
-        const half_h = @intToFloat(f32, size.h) * 0.5;
+        const half_w = @floatFromInt(f32, size.w) * 0.5;
+        const half_h = @floatFromInt(f32, size.h) * 0.5;
 
         var transform = math.Mat32.identity;
 
@@ -34,6 +34,6 @@ pub const Camera = struct {
 
     pub fn screenToWorld(self: Camera, pos: math.Vec2) math.Vec2 {
         var inv_trans_mat = self.transMat().invert();
-        return inv_trans_mat.transformVec2(.{ .x = pos.x, .y = @intToFloat(f32, gk.window.height()) - pos.y });
+        return inv_trans_mat.transformVec2(.{ .x = pos.x, .y = @floatFromInt(f32, gk.window.height()) - pos.y });
     }
 };

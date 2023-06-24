@@ -94,11 +94,11 @@ pub const Color = extern union {
     }
 
     pub fn fromRgb(r: f32, g: f32, b: f32) Color {
-        return fromBytes(@floatToInt(u8, @round(r * 255)), @floatToInt(u8, @round(g * 255)), @floatToInt(u8, @round(b * 255)), @as(u8, 255));
+        return fromBytes(@intFromFloat(u8, @round(r * 255)), @intFromFloat(u8, @round(g * 255)), @intFromFloat(u8, @round(b * 255)), @as(u8, 255));
     }
 
     pub fn fromRgba(r: f32, g: f32, b: f32, a: f32) Color {
-        return fromBytes(@floatToInt(u8, @round(r * 255)), @floatToInt(u8, @round(g * 255)), @floatToInt(u8, @round(b * 255)), @floatToInt(u8, @round(a * 255)));
+        return fromBytes(@intFromFloat(u8, @round(r * 255)), @intFromFloat(u8, @round(g * 255)), @intFromFloat(u8, @round(b * 255)), @intFromFloat(u8, @round(a * 255)));
     }
 
     pub fn fromI32(r: i32, g: i32, b: i32, a: i32) Color {
@@ -139,18 +139,18 @@ pub const Color = extern union {
 
     pub fn asArray(self: Color) [4]f32 {
         return [_]f32{
-            @intToFloat(f32, self.comps.r) / 255,
-            @intToFloat(f32, self.comps.g) / 255,
-            @intToFloat(f32, self.comps.b) / 255,
-            @intToFloat(f32, self.comps.a) / 255,
+            @floatFromInt(f32, self.comps.r) / 255,
+            @floatFromInt(f32, self.comps.g) / 255,
+            @floatFromInt(f32, self.comps.b) / 255,
+            @floatFromInt(f32, self.comps.a) / 255,
         };
     }
 
     pub fn scale(self: Color, s: f32) Color {
-        const r = @floatToInt(i32, @intToFloat(f32, self.r_val()) * s);
-        const g = @floatToInt(i32, @intToFloat(f32, self.g_val()) * s);
-        const b = @floatToInt(i32, @intToFloat(f32, self.b_val()) * s);
-        const a = @floatToInt(i32, @intToFloat(f32, self.a_val()) * s);
+        const r = @intFromFloat(i32, @floatFromInt(f32, self.r_val()) * s);
+        const g = @intFromFloat(i32, @floatFromInt(f32, self.g_val()) * s);
+        const b = @intFromFloat(i32, @floatFromInt(f32, self.b_val()) * s);
+        const a = @intFromFloat(i32, @floatFromInt(f32, self.a_val()) * s);
         return fromI32(r, g, b, a);
     }
 

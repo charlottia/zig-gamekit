@@ -64,7 +64,7 @@ pub fn main() !void {
 fn init() !void {
     camera = gk.utils.Camera.init();
     const size = gk.window.size();
-    camera.pos = .{ .x = @intToFloat(f32, size.w) * 0.5, .y = @intToFloat(f32, size.h) * 0.5 };
+    camera.pos = .{ .x = @floatFromInt(f32, size.w) * 0.5, .y = @floatFromInt(f32, size.h) * 0.5 };
 
     texture = gfx.Texture.initFromFile(std.heap.c_allocator, "examples/assets/textures/bee-8.png", .nearest) catch unreachable;
     checker_tex = gfx.Texture.initCheckerTexture();

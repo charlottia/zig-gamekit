@@ -15,28 +15,28 @@ pub const Events = struct {
         io.BackendFlags |= imgui.ImGuiBackendFlags_HasMouseCursors;
         io.BackendFlags |= imgui.ImGuiBackendFlags_HasSetMousePos;
 
-        io.KeyMap[imgui.ImGuiKey_Tab] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_TAB);
-        io.KeyMap[imgui.ImGuiKey_LeftArrow] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_LEFT);
-        io.KeyMap[imgui.ImGuiKey_RightArrow] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_RIGHT);
-        io.KeyMap[imgui.ImGuiKey_UpArrow] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_UP);
-        io.KeyMap[imgui.ImGuiKey_DownArrow] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_DOWN);
-        io.KeyMap[imgui.ImGuiKey_PageUp] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_PAGEUP);
-        io.KeyMap[imgui.ImGuiKey_PageDown] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_PAGEDOWN);
-        io.KeyMap[imgui.ImGuiKey_Home] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_HOME);
-        io.KeyMap[imgui.ImGuiKey_End] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_END);
-        io.KeyMap[imgui.ImGuiKey_Insert] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_INSERT);
-        io.KeyMap[imgui.ImGuiKey_Delete] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_DELETE);
-        io.KeyMap[imgui.ImGuiKey_Backspace] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_BACKSPACE);
-        io.KeyMap[imgui.ImGuiKey_Space] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_SPACE);
-        io.KeyMap[imgui.ImGuiKey_Enter] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_RETURN);
-        io.KeyMap[imgui.ImGuiKey_Escape] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_ESCAPE);
-        io.KeyMap[imgui.ImGuiKey_KeyPadEnter] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_RETURN2);
-        io.KeyMap[imgui.ImGuiKey_A] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_A);
-        io.KeyMap[imgui.ImGuiKey_C] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_C);
-        io.KeyMap[imgui.ImGuiKey_V] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_V);
-        io.KeyMap[imgui.ImGuiKey_X] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_X);
-        io.KeyMap[imgui.ImGuiKey_Y] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_Y);
-        io.KeyMap[imgui.ImGuiKey_Z] = @enumToInt(sdl.SDL_Scancode.SDL_SCANCODE_Z);
+        io.KeyMap[imgui.ImGuiKey_Tab] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_TAB);
+        io.KeyMap[imgui.ImGuiKey_LeftArrow] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_LEFT);
+        io.KeyMap[imgui.ImGuiKey_RightArrow] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_RIGHT);
+        io.KeyMap[imgui.ImGuiKey_UpArrow] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_UP);
+        io.KeyMap[imgui.ImGuiKey_DownArrow] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_DOWN);
+        io.KeyMap[imgui.ImGuiKey_PageUp] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_PAGEUP);
+        io.KeyMap[imgui.ImGuiKey_PageDown] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_PAGEDOWN);
+        io.KeyMap[imgui.ImGuiKey_Home] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_HOME);
+        io.KeyMap[imgui.ImGuiKey_End] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_END);
+        io.KeyMap[imgui.ImGuiKey_Insert] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_INSERT);
+        io.KeyMap[imgui.ImGuiKey_Delete] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_DELETE);
+        io.KeyMap[imgui.ImGuiKey_Backspace] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_BACKSPACE);
+        io.KeyMap[imgui.ImGuiKey_Space] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_SPACE);
+        io.KeyMap[imgui.ImGuiKey_Enter] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_RETURN);
+        io.KeyMap[imgui.ImGuiKey_Escape] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_ESCAPE);
+        io.KeyMap[imgui.ImGuiKey_KeyPadEnter] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_RETURN2);
+        io.KeyMap[imgui.ImGuiKey_A] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_A);
+        io.KeyMap[imgui.ImGuiKey_C] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_C);
+        io.KeyMap[imgui.ImGuiKey_V] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_V);
+        io.KeyMap[imgui.ImGuiKey_X] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_X);
+        io.KeyMap[imgui.ImGuiKey_Y] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_Y);
+        io.KeyMap[imgui.ImGuiKey_Z] = @intFromEnum(sdl.SDL_Scancode.SDL_SCANCODE_Z);
 
         io.SetClipboardTextFn = setClipboardTextFn;
         io.GetClipboardTextFn = getClipboardTextFn;
@@ -96,26 +96,26 @@ pub const Events = struct {
         var drawable_size = gk.window.drawableSize();
 
         const io = imgui.igGetIO();
-        io.DisplaySize = imgui.ImVec2{ .x = @intToFloat(f32, win_size.w), .y = @intToFloat(f32, win_size.h) };
+        io.DisplaySize = imgui.ImVec2{ .x = @floatFromInt(f32, win_size.w), .y = @floatFromInt(f32, win_size.h) };
 
         if (win_size.w > 0 and win_size.h > 0) {
             io.DisplayFramebufferScale = imgui.ImVec2{
-                .x = @intToFloat(f32, drawable_size.w) / @intToFloat(f32, win_size.w),
-                .y = @intToFloat(f32, drawable_size.h) / @intToFloat(f32, win_size.h),
+                .x = @floatFromInt(f32, drawable_size.w) / @floatFromInt(f32, win_size.w),
+                .y = @floatFromInt(f32, drawable_size.h) / @floatFromInt(f32, win_size.h),
             };
         }
 
         const frequency = sdl.SDL_GetPerformanceFrequency();
         const current_time = sdl.SDL_GetPerformanceCounter();
-        io.DeltaTime = if (self.global_time > 0) @floatCast(f32, (@intToFloat(f64, current_time - self.global_time)) / @intToFloat(f64, frequency)) else @as(f32, 1 / 60);
+        io.DeltaTime = if (self.global_time > 0) @floatCast(f32, (@floatFromInt(f64, current_time - self.global_time)) / @floatFromInt(f64, frequency)) else @as(f32, 1 / 60);
         self.global_time = current_time;
 
         // ImGui_ImplSDL2_UpdateMousePosAndButtons
         if (io.WantSetMousePos) {
             if ((io.ConfigFlags & imgui.ImGuiConfigFlags_ViewportsEnable) != 0) {
-                _ = sdl.SDL_WarpMouseGlobal(@floatToInt(c_int, io.MousePos.x), @floatToInt(c_int, io.MousePos.y));
+                _ = sdl.SDL_WarpMouseGlobal(@intFromFloat(c_int, io.MousePos.x), @intFromFloat(c_int, io.MousePos.y));
             } else {
-                _ = sdl.SDL_WarpMouseInWindow(window, @floatToInt(c_int, io.MousePos.x), @floatToInt(c_int, io.MousePos.y));
+                _ = sdl.SDL_WarpMouseInWindow(window, @intFromFloat(c_int, io.MousePos.x), @intFromFloat(c_int, io.MousePos.y));
             }
         }
 
@@ -137,13 +137,13 @@ pub const Events = struct {
 
         if (io.ConfigFlags & imgui.ImGuiConfigFlags_ViewportsEnable != 0) {
             std.log.warn("viewports not implemented\n", .{});
-        } else if (sdl.SDL_GetWindowFlags(window) | @intCast(u32, @enumToInt(sdl.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS)) != 1) {
+        } else if (sdl.SDL_GetWindowFlags(window) | @intCast(u32, @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS)) != 1) {
             var win_x: i32 = undefined;
             var win_y: i32 = undefined;
             sdl.SDL_GetWindowPosition(window, &win_x, &win_y);
             io.MousePos = imgui.ImVec2{
-                .x = @intToFloat(f32, mouse_x_global - win_x),
-                .y = @intToFloat(f32, mouse_y_global - win_y),
+                .x = @floatFromInt(f32, mouse_x_global - win_x),
+                .y = @floatFromInt(f32, mouse_y_global - win_y),
             };
         }
 
@@ -190,17 +190,17 @@ pub const Events = struct {
             },
             sdl.SDL_KEYDOWN, sdl.SDL_KEYUP => {
                 const io = imgui.igGetIO();
-                const mod_state = @enumToInt(sdl.SDL_GetModState());
-                io.KeysDown[@intCast(usize, @enumToInt(event.key.keysym.scancode))] = event.type == sdl.SDL_KEYDOWN;
-                io.KeyShift = (mod_state & @enumToInt(sdl.SDL_Keymod.KMOD_SHIFT)) != 0;
-                io.KeyCtrl = (mod_state & @enumToInt(sdl.SDL_Keymod.KMOD_CTRL)) != 0;
-                io.KeyAlt = (mod_state & @enumToInt(sdl.SDL_Keymod.KMOD_ALT)) != 0;
-                if (@import("builtin").target.os.tag == .windows) io.KeySuper = false else io.KeySuper = (mod_state & @enumToInt(sdl.SDL_Keymod.KMOD_GUI)) != 0;
+                const mod_state = @intFromEnum(sdl.SDL_GetModState());
+                io.KeysDown[@intCast(usize, @intFromEnum(event.key.keysym.scancode))] = event.type == sdl.SDL_KEYDOWN;
+                io.KeyShift = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_SHIFT)) != 0;
+                io.KeyCtrl = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_CTRL)) != 0;
+                io.KeyAlt = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_ALT)) != 0;
+                if (@import("builtin").target.os.tag == .windows) io.KeySuper = false else io.KeySuper = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_GUI)) != 0;
                 return io.WantCaptureKeyboard;
             },
             sdl.SDL_WINDOWEVENT => {
                 // TODO: should this return true?
-                const event_type = @intToEnum(sdl.SDL_WindowEventID, event.window.event);
+                const event_type = @enumFromInt(sdl.SDL_WindowEventID, event.window.event);
                 if (event_type == .SDL_WINDOWEVENT_CLOSE or event_type == .SDL_WINDOWEVENT_MOVED or event_type == .SDL_WINDOWEVENT_RESIZED) {
                     if (imgui.igFindViewportByPlatformHandle(sdl.SDL_GetWindowFromID(event.window.windowID))) |viewport| {
                         if (event_type == .SDL_WINDOWEVENT_CLOSE) viewport.PlatformRequestClose = true;

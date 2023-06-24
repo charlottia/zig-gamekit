@@ -134,7 +134,7 @@ pub const FontBook = struct {
     fn renderCreate(ctx: ?*anyopaque, width: c_int, height: c_int) callconv(.C) c_int {
         var self = @ptrCast(*FontBook, @alignCast(@alignOf(FontBook), ctx));
 
-        if (self.texture != null and (self.texture.?.width != @intToFloat(f32, width) or self.texture.?.height != @intToFloat(f32, height))) {
+        if (self.texture != null and (self.texture.?.width != @floatFromInt(f32, width) or self.texture.?.height != @floatFromInt(f32, height))) {
             self.texture.?.deinit();
             self.texture = null;
         }

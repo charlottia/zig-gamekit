@@ -79,11 +79,11 @@ pub const MultiBatcher = struct {
     }
 
     inline fn submitTexture(self: *MultiBatcher, img: rk.Image) f32 {
-        if (std.mem.indexOfScalar(rk.Image, &self.textures, img)) |index| return @intToFloat(f32, index);
+        if (std.mem.indexOfScalar(rk.Image, &self.textures, img)) |index| return @floatFromInt(f32, index);
 
         self.textures[self.last_texture] = img;
         self.last_texture += 1;
-        return @intToFloat(f32, self.last_texture - 1);
+        return @floatFromInt(f32, self.last_texture - 1);
     }
 
     pub fn drawTex(self: *MultiBatcher, pos: math.Vec2, col: u32, texture: gk.gfx.Texture) void {

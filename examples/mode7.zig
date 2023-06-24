@@ -124,7 +124,7 @@ pub fn main() !void {
 
 fn init() !void {
     const drawable_size = gk.window.drawableSize();
-    camera = Camera.init(@intToFloat(f32, drawable_size.w), @intToFloat(f32, drawable_size.h));
+    camera = Camera.init(@floatFromInt(f32, drawable_size.w), @floatFromInt(f32, drawable_size.h));
 
     map = Texture.initFromFile(std.heap.c_allocator, "examples/assets/textures/mario_kart.png", .nearest) catch unreachable;
     block = Texture.initFromFile(std.heap.c_allocator, "examples/assets/textures/block.png", .nearest) catch unreachable;
@@ -247,6 +247,6 @@ fn drawPlane() void {
     // bind our map to the second texture slot and we need a full screen render for the shader so we just draw a full screen rect
     gfx.draw.bindTexture(map, 1);
     const drawable_size = gk.window.size();
-    gfx.draw.rect(.{}, @intToFloat(f32, drawable_size.w), @intToFloat(f32, drawable_size.h), math.Color.white);
+    gfx.draw.rect(.{}, @floatFromInt(f32, drawable_size.w), @floatFromInt(f32, drawable_size.h), math.Color.white);
     gfx.setShader(null);
 }

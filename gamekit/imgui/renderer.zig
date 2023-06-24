@@ -85,12 +85,12 @@ pub const Renderer = struct {
         self.bindings.index_buffer_offset = 0;
 
         var tex_id = imgui.igGetIO().Fonts.TexID;
-        self.bindings.images[0] = @intCast(rk.Image, @ptrToInt(tex_id));
+        self.bindings.images[0] = @intCast(rk.Image, @intFromPtr(tex_id));
 
         var fb_scale = draw_data.FramebufferScale;
         imgui.ogImDrawData_ScaleClipRects(draw_data, fb_scale);
-        const width = @floatToInt(i32, draw_data.DisplaySize.x * fb_scale.x);
-        const height = @floatToInt(i32, draw_data.DisplaySize.y * fb_scale.y);
+        const width = @intFromFloat(i32, draw_data.DisplaySize.x * fb_scale.x);
+        const height = @intFromFloat(i32, draw_data.DisplaySize.y * fb_scale.y);
         rk.viewport(0, 0, width, height);
 
         gfx.setShader(null);
@@ -116,16 +116,16 @@ pub const Renderer = struct {
                     cb(list, &cmd);
                 } else {
                     // DisplayPos is 0,0 unless viewports is enabled
-                    const clip_x = @floatToInt(i32, (cmd.ClipRect.x - draw_data.DisplayPos.x) * fb_scale.x);
-                    const clip_y = @floatToInt(i32, (cmd.ClipRect.y - draw_data.DisplayPos.y) * fb_scale.y);
-                    const clip_w = @floatToInt(i32, (cmd.ClipRect.z - draw_data.DisplayPos.x) * fb_scale.x);
-                    const clip_h = @floatToInt(i32, (cmd.ClipRect.w - draw_data.DisplayPos.y) * fb_scale.y);
+                    const clip_x = @intFromFloat(i32, (cmd.ClipRect.x - draw_data.DisplayPos.x) * fb_scale.x);
+                    const clip_y = @intFromFloat(i32, (cmd.ClipRect.y - draw_data.DisplayPos.y) * fb_scale.y);
+                    const clip_w = @intFromFloat(i32, (cmd.ClipRect.z - draw_data.DisplayPos.x) * fb_scale.x);
+                    const clip_h = @intFromFloat(i32, (cmd.ClipRect.w - draw_data.DisplayPos.y) * fb_scale.y);
 
                     rk.scissor(clip_x, clip_y, clip_w - clip_x, clip_h - clip_y);
 
                     if (tex_id != cmd.TextureId or vtx_offset != cmd.VtxOffset) {
                         tex_id = cmd.TextureId;
-                        self.bindings.images[0] = @intCast(rk.Image, @ptrToInt(tex_id));
+                        self.bindings.images[0] = @intCast(rk.Image, @intFromPtr(tex_id));
 
                         vtx_offset = cmd.VtxOffset;
                         self.bindings.vertex_buffer_offsets[0] = vb_offset + vtx_offset * @sizeOf(imgui.ImDrawVert);
@@ -148,7 +148,7 @@ pub const Renderer = struct {
         if (draw_data.TotalIdxCount > self.index_buffer_size) {
             rk.destroyBuffer(self.bindings.index_buffer);
 
-            self.index_buffer_size = @floatToInt(c_long, @intToFloat(f32, draw_data.TotalIdxCount) * 1.5);
+            self.index_buffer_size = @intFromFloat(c_long, @floatFromInt(f32, draw_data.TotalIdxCount) * 1.5);
             var ibuffer = rk.createBuffer(u16, .{
                 .type = .index,
                 .usage = .stream,
@@ -160,7 +160,7 @@ pub const Renderer = struct {
         if (draw_data.TotalVtxCount > self.vert_buffer_size) {
             rk.destroyBuffer(self.bindings.vert_buffers[0]);
 
-            self.vert_buffer_size = @floatToInt(c_long, @intToFloat(f32, draw_data.TotalVtxCount) * 1.5);
+            self.vert_buffer_size = @intFromFloat(c_long, @floatFromInt(f32, draw_data.TotalVtxCount) * 1.5);
             var vertex_buffer = rk.createBuffer(gfx.Vertex, .{
                 .usage = .stream,
                 .size = self.vert_buffer_size,

@@ -103,7 +103,7 @@ pub fn beginPass(config: PassConfig) void {
     } else {
         const size = gamekit.window.drawableSize();
         renderkit.beginDefaultPass(clear_command, size.w, size.h);
-        proj_mat = math.Mat32.initOrtho(@intToFloat(f32, size.w), @intToFloat(f32, size.h));
+        proj_mat = math.Mat32.initOrtho(@floatFromInt(f32, size.w), @floatFromInt(f32, size.h));
     }
 
     // if we were given a transform matrix multiply it here

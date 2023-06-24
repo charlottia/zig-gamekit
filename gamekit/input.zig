@@ -18,7 +18,7 @@ pub const MouseButton = enum(usize) {
 };
 
 pub const Input = struct {
-    keys: [@intCast(usize, @enumToInt(input_types.Keys.num_keys))]u2 = [_]u2{0} ** @intCast(usize, @enumToInt(input_types.Keys.num_keys)),
+    keys: [@intCast(usize, @intFromEnum(input_types.Keys.num_keys))]u2 = [_]u2{0} ** @intCast(usize, @intFromEnum(input_types.Keys.num_keys)),
     dirty_keys: FixedList(i32, 10),
     mouse_buttons: [4]u2 = [_]u2{0} ** 4,
     dirty_mouse_buttons: FixedList(u2, 3),
@@ -36,7 +36,7 @@ pub const Input = struct {
         return .{
             .dirty_keys = FixedList(i32, 10).init(),
             .dirty_mouse_buttons = FixedList(u2, 3).init(),
-            .window_scale = @floatToInt(i32, win_scale),
+            .window_scale = @intFromFloat(i32, win_scale),
         };
     }
 
@@ -95,7 +95,7 @@ pub const Input = struct {
     }
 
     fn handleKeyboardEvent(self: *Input, evt: *sdl.SDL_KeyboardEvent) void {
-        const scancode = @enumToInt(evt.keysym.scancode);
+        const scancode = @intFromEnum(evt.keysym.scancode);
         self.dirty_keys.append(scancode);
 
         if (evt.state == 0) {
@@ -120,17 +120,17 @@ pub const Input = struct {
 
     /// only true if down this frame and not down the previous frame
     pub fn keyPressed(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @enumToInt(key))] == pressed;
+        return self.keys[@intCast(usize, @intFromEnum(key))] == pressed;
     }
 
     /// true the entire time the key is down
     pub fn keyDown(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @enumToInt(key))] > released;
+        return self.keys[@intCast(usize, @intFromEnum(key))] > released;
     }
 
     /// true only the frame the key is released
     pub fn keyUp(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @enumToInt(key))] == released;
+        return self.keys[@intCast(usize, @intFromEnum(key))] == released;
     }
 
     /// slice is only valid for the current frame
@@ -145,17 +145,17 @@ pub const Input = struct {
 
     /// only true if down this frame and not down the previous frame
     pub fn mousePressed(self: Input, button: MouseButton) bool {
-        return self.mouse_buttons[@enumToInt(button)] == pressed;
+        return self.mouse_buttons[@intFromEnum(button)] == pressed;
     }
 
     /// true the entire time the button is down
     pub fn mouseDown(self: Input, button: MouseButton) bool {
-        return self.mouse_buttons[@enumToInt(button)] > released;
+        return self.mouse_buttons[@intFromEnum(button)] > released;
     }
 
     /// true only the frame the button is released
     pub fn mouseUp(self: Input, button: MouseButton) bool {
-        return self.mouse_buttons[@enumToInt(button)] == released;
+        return self.mouse_buttons[@intFromEnum(button)] == released;
     }
 
     pub fn mouseWheel(self: Input) i32 {
@@ -166,7 +166,7 @@ pub const Input = struct {
         var xc: c_int = undefined;
         var yc: c_int = undefined;
         _ = sdl.SDL_GetMouseState(&xc, &yc);
-        return .{ .x = @intToFloat(f32, xc * self.window_scale), .y = @intToFloat(f32, yc * self.window_scale) };
+        return .{ .x = @floatFromInt(f32, xc * self.window_scale), .y = @floatFromInt(f32, yc * self.window_scale) };
     }
 
     // gets the scaled mouse position based on the currently bound render texture scale and offset
@@ -174,8 +174,8 @@ pub const Input = struct {
     pub fn mousePosScaled(self: Input) math.Vec2 {
         const p = self.mousePos();
 
-        const xf = p.x - @intToFloat(f32, self.res_scaler.x);
-        const yf = p.y - @intToFloat(f32, self.res_scaler.y);
+        const xf = p.x - @floatFromInt(f32, self.res_scaler.x);
+        const yf = p.y - @floatFromInt(f32, self.res_scaler.y);
         return .{ .x = xf / self.res_scaler.scale, .y = yf / self.res_scaler.scale };
     }
 
@@ -183,7 +183,7 @@ pub const Input = struct {
         var x: i32 = undefined;
         var y: i32 = undefined;
         self.mousePosScaled(&x, &y);
-        return .{ .x = @intToFloat(f32, x), .y = @intToFloat(f32, y) };
+        return .{ .x = @floatFromInt(f32, x), .y = @floatFromInt(f32, y) };
     }
 
     pub fn mouseRelMotion(self: Input, x: *i32, y: *i32) void {

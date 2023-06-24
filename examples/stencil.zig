@@ -38,7 +38,7 @@ fn update() !void {
     const size = gk.window.size();
     for (&points) |*p| {
         p.pos.x += p.dir * speed;
-        if (p.pos.x + 0.30 * gk.time.rawDeltaTime() > @intToFloat(f32, size.w)) p.dir *= -1;
+        if (p.pos.x + 0.30 * gk.time.rawDeltaTime() > @floatFromInt(f32, size.w)) p.dir *= -1;
         if (p.pos.x - 0.30 * gk.time.rawDeltaTime() < 0) p.dir *= -1;
     }
 }

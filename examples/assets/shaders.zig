@@ -14,15 +14,18 @@ pub fn createMode7Shader() Mode7Shader {
 pub fn createMrtShader() !gfx.Shader {
     const vert = @embedFile("shaders/sprite_vs.glsl");
     const frag = @embedFile("shaders/mrt_fs.glsl");
-    return try gfx.Shader.initWithVertFrag(VertexParams, struct { pub const metadata = .{ .images = .{ "main_tex" } }; }, .{ .frag = frag, .vert = vert });
+    return try gfx.Shader.initWithVertFrag(VertexParams, struct {
+        pub const metadata = .{ .images = .{"main_tex"} };
+    }, .{ .frag = frag, .vert = vert });
 }
 
 pub fn createVertSwayShader() !gfx.Shader {
     const vert = @embedFile("shaders/vert_sway_vs.glsl");
     const frag = @embedFile("shaders/sprite_fs.glsl");
-    return try gfx.Shader.initWithVertFrag(VertexSwayParams, struct { pub const metadata = .{ .images = .{ "main_tex" } }; }, .{ .frag = frag, .vert = vert });
+    return try gfx.Shader.initWithVertFrag(VertexSwayParams, struct {
+        pub const metadata = .{ .images = .{"main_tex"} };
+    }, .{ .frag = frag, .vert = vert });
 }
-
 
 pub const VertexParams = extern struct {
     pub const metadata = .{
@@ -61,4 +64,3 @@ pub const Mode7Params = extern struct {
     y1: f32 = 0,
     y2: f32 = 0,
 };
-

@@ -62,7 +62,7 @@ fn render() !void {
     if (imgui.ogButton("Camera Pos to 0,0")) camera.pos = .{};
     if (imgui.ogButton("Camera Pos to screen center")) {
         const size = gk.window.size();
-        camera.pos = .{ .x = @intToFloat(f32, size.w) * 0.5, .y = @intToFloat(f32, size.h) * 0.5 };
+        camera.pos = .{ .x = @floatFromInt(f32, size.w) * 0.5, .y = @floatFromInt(f32, size.h) * 0.5 };
     }
 
     gfx.draw.point(.{}, 40, gk.math.Color.white);

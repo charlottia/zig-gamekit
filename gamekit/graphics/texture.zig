@@ -27,8 +27,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @intToFloat(f32, width),
-            .height = @intToFloat(f32, height),
+            .width = @floatFromInt(f32, width),
+            .height = @floatFromInt(f32, height),
         };
     }
 
@@ -62,8 +62,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @intToFloat(f32, width),
-            .height = @intToFloat(f32, height),
+            .width = @floatFromInt(f32, width),
+            .height = @floatFromInt(f32, height),
         };
     }
 
@@ -96,8 +96,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @intToFloat(f32, width),
-            .height = @intToFloat(f32, height),
+            .width = @floatFromInt(f32, width),
+            .height = @floatFromInt(f32, height),
         };
     }
 
@@ -114,8 +114,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @intToFloat(f32, width),
-            .height = @intToFloat(f32, height),
+            .width = @floatFromInt(f32, width),
+            .height = @floatFromInt(f32, height),
         };
     }
 
@@ -128,6 +128,6 @@ pub const Texture = struct {
     }
 
     pub fn imTextureID(self: Texture) imgui.ImTextureID {
-        return @intToPtr(*anyopaque, self.img);
+        return @ptrFromInt(*anyopaque, self.img);
     }
 };
