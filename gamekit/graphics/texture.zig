@@ -80,7 +80,7 @@ pub const Texture = struct {
 
     pub fn initSingleColor(color: u32) Texture {
         var pixels: [16]u32 = undefined;
-        std.mem.set(u32, &pixels, color);
+        @memset(&pixels, color);
         return initWithData(u32, 4, 4, pixels[0..]);
     }
 
