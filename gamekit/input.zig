@@ -18,7 +18,7 @@ pub const MouseButton = enum(usize) {
 };
 
 pub const Input = struct {
-    keys: [@intCast(usize, @intFromEnum(input_types.Keys.num_keys))]u2 = [_]u2{0} ** @intCast(usize, @intFromEnum(input_types.Keys.num_keys)),
+    keys: [@as(usize, @intCast(@intFromEnum(input_types.Keys.num_keys)))]u2 = [_]u2{0} ** @as(usize, @intCast(@intFromEnum(input_types.Keys.num_keys))),
     dirty_keys: FixedList(i32, 10),
     mouse_buttons: [4]u2 = [_]u2{0} ** 4,
     dirty_mouse_buttons: FixedList(u2, 3),
@@ -36,7 +36,7 @@ pub const Input = struct {
         return .{
             .dirty_keys = FixedList(i32, 10).init(),
             .dirty_mouse_buttons = FixedList(u2, 3).init(),
-            .window_scale = @intFromFloat(i32, win_scale),
+            .window_scale = @as(i32, @intFromFloat(win_scale)),
         };
     }
 
@@ -45,7 +45,7 @@ pub const Input = struct {
         if (self.dirty_keys.len > 0) {
             var iter = self.dirty_keys.iter();
             while (iter.next()) |key| {
-                const ukey = @intCast(usize, key);
+                const ukey = @as(usize, @intCast(key));
 
                 // guard against double key presses
                 if (self.keys[ukey] > 0)
@@ -99,20 +99,20 @@ pub const Input = struct {
         self.dirty_keys.append(scancode);
 
         if (evt.state == 0) {
-            self.keys[@intCast(usize, scancode)] = released;
+            self.keys[@as(usize, @intCast(scancode))] = released;
         } else {
-            self.keys[@intCast(usize, scancode)] = pressed;
+            self.keys[@as(usize, @intCast(scancode))] = pressed;
         }
 
         // std.debug.warn("kb: {s}: {}\n", .{ sdl.SDL_GetKeyName(evt.keysym.sym), evt });
     }
 
     fn handleMouseEvent(self: *Input, evt: *sdl.SDL_MouseButtonEvent) void {
-        self.dirty_mouse_buttons.append(@intCast(u2, evt.button));
+        self.dirty_mouse_buttons.append(@as(u2, @intCast(evt.button)));
         if (evt.state == 0) {
-            self.mouse_buttons[@intCast(usize, evt.button)] = released;
+            self.mouse_buttons[@as(usize, @intCast(evt.button))] = released;
         } else {
-            self.mouse_buttons[@intCast(usize, evt.button)] = pressed;
+            self.mouse_buttons[@as(usize, @intCast(evt.button))] = pressed;
         }
 
         // std.debug.warn("mouse: {}\n", .{evt});
@@ -120,17 +120,17 @@ pub const Input = struct {
 
     /// only true if down this frame and not down the previous frame
     pub fn keyPressed(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @intFromEnum(key))] == pressed;
+        return self.keys[@as(usize, @intCast(@intFromEnum(key)))] == pressed;
     }
 
     /// true the entire time the key is down
     pub fn keyDown(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @intFromEnum(key))] > released;
+        return self.keys[@as(usize, @intCast(@intFromEnum(key)))] > released;
     }
 
     /// true only the frame the key is released
     pub fn keyUp(self: Input, key: input_types.Keys) bool {
-        return self.keys[@intCast(usize, @intFromEnum(key))] == released;
+        return self.keys[@as(usize, @intCast(@intFromEnum(key)))] == released;
     }
 
     /// slice is only valid for the current frame
@@ -166,7 +166,7 @@ pub const Input = struct {
         var xc: c_int = undefined;
         var yc: c_int = undefined;
         _ = sdl.SDL_GetMouseState(&xc, &yc);
-        return .{ .x = @floatFromInt(f32, xc * self.window_scale), .y = @floatFromInt(f32, yc * self.window_scale) };
+        return .{ .x = @as(f32, @floatFromInt(xc * self.window_scale)), .y = @as(f32, @floatFromInt(yc * self.window_scale)) };
     }
 
     // gets the scaled mouse position based on the currently bound render texture scale and offset
@@ -174,8 +174,8 @@ pub const Input = struct {
     pub fn mousePosScaled(self: Input) math.Vec2 {
         const p = self.mousePos();
 
-        const xf = p.x - @floatFromInt(f32, self.res_scaler.x);
-        const yf = p.y - @floatFromInt(f32, self.res_scaler.y);
+        const xf = p.x - @as(f32, @floatFromInt(self.res_scaler.x));
+        const yf = p.y - @as(f32, @floatFromInt(self.res_scaler.y));
         return .{ .x = xf / self.res_scaler.scale, .y = yf / self.res_scaler.scale };
     }
 
@@ -183,7 +183,7 @@ pub const Input = struct {
         var x: i32 = undefined;
         var y: i32 = undefined;
         self.mousePosScaled(&x, &y);
-        return .{ .x = @floatFromInt(f32, x), .y = @floatFromInt(f32, y) };
+        return .{ .x = @as(f32, @floatFromInt(x)), .y = @as(f32, @floatFromInt(y)) };
     }
 
     pub fn mouseRelMotion(self: Input, x: *i32, y: *i32) void {

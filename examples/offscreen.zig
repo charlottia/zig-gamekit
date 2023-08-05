@@ -53,7 +53,7 @@ var rt_pos: math.Vec2 = .{};
 var camera: gk.utils.Camera = undefined;
 
 pub fn main() !void {
-    rng.seed(@intCast(u64, std.time.milliTimestamp()));
+    rng.seed(@as(u64, @intCast(std.time.milliTimestamp())));
     try gk.run(.{
         .init = init,
         .update = update,
@@ -64,7 +64,7 @@ pub fn main() !void {
 fn init() !void {
     camera = gk.utils.Camera.init();
     const size = gk.window.size();
-    camera.pos = .{ .x = @floatFromInt(f32, size.w) * 0.5, .y = @floatFromInt(f32, size.h) * 0.5 };
+    camera.pos = .{ .x = @as(f32, @floatFromInt(size.w)) * 0.5, .y = @as(f32, @floatFromInt(size.h)) * 0.5 };
 
     texture = gfx.Texture.initFromFile(std.heap.c_allocator, "examples/assets/textures/bee-8.png", .nearest) catch unreachable;
     checker_tex = gfx.Texture.initCheckerTexture();

@@ -27,8 +27,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @floatFromInt(f32, width),
-            .height = @floatFromInt(f32, height),
+            .width = @as(f32, @floatFromInt(width)),
+            .height = @as(f32, @floatFromInt(height)),
         };
     }
 
@@ -39,11 +39,11 @@ pub const Texture = struct {
         var w: c_int = undefined;
         var h: c_int = undefined;
         var channels: c_int = undefined;
-        const load_res = stb_image.stbi_load_from_memory(image_contents.ptr, @intCast(c_int, image_contents.len), &w, &h, &channels, 4);
+        const load_res = stb_image.stbi_load_from_memory(image_contents.ptr, @as(c_int, @intCast(image_contents.len)), &w, &h, &channels, 4);
         if (load_res == null) return error.ImageLoadFailed;
         defer stb_image.stbi_image_free(load_res);
 
-        return initWithDataOptions(u8, w, h, load_res[0..@intCast(usize, w * h * channels)], filter, .clamp);
+        return initWithDataOptions(u8, w, h, load_res[0..@as(usize, @intCast(w * h * channels))], filter, .clamp);
     }
 
     pub fn initWithData(comptime T: type, width: i32, height: i32, pixels: []T) Texture {
@@ -62,8 +62,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @floatFromInt(f32, width),
-            .height = @floatFromInt(f32, height),
+            .width = @as(f32, @floatFromInt(width)),
+            .height = @as(f32, @floatFromInt(height)),
         };
     }
 
@@ -96,8 +96,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @floatFromInt(f32, width),
-            .height = @floatFromInt(f32, height),
+            .width = @as(f32, @floatFromInt(width)),
+            .height = @as(f32, @floatFromInt(height)),
         };
     }
 
@@ -114,8 +114,8 @@ pub const Texture = struct {
         });
         return .{
             .img = img,
-            .width = @floatFromInt(f32, width),
-            .height = @floatFromInt(f32, height),
+            .width = @as(f32, @floatFromInt(width)),
+            .height = @as(f32, @floatFromInt(height)),
         };
     }
 
@@ -128,6 +128,6 @@ pub const Texture = struct {
     }
 
     pub fn imTextureID(self: Texture) imgui.ImTextureID {
-        return @ptrFromInt(*anyopaque, self.img);
+        return @as(*anyopaque, @ptrFromInt(self.img));
     }
 };

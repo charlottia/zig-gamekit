@@ -31,7 +31,7 @@ fn shutdown() !void {
 
 fn update() !void {
     std.mem.copy(f32, &vs_params.transform_matrix, &gfx.state.transform_mat.data);
-    vs_params.time = @floatCast(f32, gk.time.toSeconds(gk.time.now()));
+    vs_params.time = @as(f32, @floatCast(gk.time.toSeconds(gk.time.now())));
 }
 
 fn render() !void {

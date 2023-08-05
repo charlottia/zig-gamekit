@@ -60,7 +60,7 @@ var textures: []gfx.Texture = undefined;
 var things: []Thing = undefined;
 
 pub fn main() !void {
-    rng.seed(@intCast(u64, std.time.milliTimestamp()));
+    rng.seed(@as(u64, @intCast(std.time.milliTimestamp())));
     try gk.run(.{ .init = init, .update = update, .render = render, .shutdown = shutdown, .window = .{ .disable_vsync = true } });
 }
 
@@ -77,7 +77,7 @@ fn init() !void {
 
     if (use_multi_texture_batcher) {
         var uniform = MultiFragUniform{};
-        for (uniform.samplers, 0..) |*val, i| val.* = @intCast(c_int, i);
+        for (uniform.samplers, 0..) |*val, i| val.* = @as(c_int, @intCast(i));
         shader.?.bind();
         shader.?.setVertUniform(MultiFragUniform, &uniform);
     }
@@ -98,8 +98,8 @@ fn shutdown() !void {
 
 fn update() !void {
     const size = gk.window.size();
-    const win_w = @floatFromInt(f32, size.w);
-    const win_h = @floatFromInt(f32, size.h);
+    const win_w = @as(f32, @floatFromInt(size.w));
+    const win_h = @as(f32, @floatFromInt(size.h));
 
     if (@mod(gk.time.frames(), 500) == 0) std.debug.print("fps: {d}\n", .{gk.time.fps()});
 

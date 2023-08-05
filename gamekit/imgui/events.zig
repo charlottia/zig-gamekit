@@ -42,15 +42,15 @@ pub const Events = struct {
         io.GetClipboardTextFn = getClipboardTextFn;
 
         var self = Events{};
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_Arrow)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_ARROW);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_TextInput)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_IBEAM);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_ResizeAll)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEALL);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_ResizeNS)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENS);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_ResizeEW)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEWE);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_ResizeNESW)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENESW);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_ResizeNWSE)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENWSE);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_Hand)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_HAND);
-        self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_NotAllowed)] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_NO);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_Arrow))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_ARROW);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_TextInput))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_IBEAM);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_ResizeAll))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEALL);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_ResizeNS))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENS);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_ResizeEW))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZEWE);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_ResizeNESW))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENESW);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_ResizeNWSE))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_SIZENWSE);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_Hand))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_HAND);
+        self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_NotAllowed))] = sdl.SDL_CreateSystemCursor(sdl.SDL_SystemCursor.SDL_SYSTEM_CURSOR_NO);
 
         // TODO: ImGui_ImplSDL2_UpdateMonitors
 
@@ -96,26 +96,26 @@ pub const Events = struct {
         var drawable_size = gk.window.drawableSize();
 
         const io = imgui.igGetIO();
-        io.DisplaySize = imgui.ImVec2{ .x = @floatFromInt(f32, win_size.w), .y = @floatFromInt(f32, win_size.h) };
+        io.DisplaySize = imgui.ImVec2{ .x = @as(f32, @floatFromInt(win_size.w)), .y = @as(f32, @floatFromInt(win_size.h)) };
 
         if (win_size.w > 0 and win_size.h > 0) {
             io.DisplayFramebufferScale = imgui.ImVec2{
-                .x = @floatFromInt(f32, drawable_size.w) / @floatFromInt(f32, win_size.w),
-                .y = @floatFromInt(f32, drawable_size.h) / @floatFromInt(f32, win_size.h),
+                .x = @as(f32, @floatFromInt(drawable_size.w)) / @as(f32, @floatFromInt(win_size.w)),
+                .y = @as(f32, @floatFromInt(drawable_size.h)) / @as(f32, @floatFromInt(win_size.h)),
             };
         }
 
         const frequency = sdl.SDL_GetPerformanceFrequency();
         const current_time = sdl.SDL_GetPerformanceCounter();
-        io.DeltaTime = if (self.global_time > 0) @floatCast(f32, (@floatFromInt(f64, current_time - self.global_time)) / @floatFromInt(f64, frequency)) else @as(f32, 1 / 60);
+        io.DeltaTime = if (self.global_time > 0) @as(f32, @floatCast((@as(f64, @floatFromInt(current_time - self.global_time))) / @as(f64, @floatFromInt(frequency)))) else @as(f32, 1 / 60);
         self.global_time = current_time;
 
         // ImGui_ImplSDL2_UpdateMousePosAndButtons
         if (io.WantSetMousePos) {
             if ((io.ConfigFlags & imgui.ImGuiConfigFlags_ViewportsEnable) != 0) {
-                _ = sdl.SDL_WarpMouseGlobal(@intFromFloat(c_int, io.MousePos.x), @intFromFloat(c_int, io.MousePos.y));
+                _ = sdl.SDL_WarpMouseGlobal(@as(c_int, @intFromFloat(io.MousePos.x)), @as(c_int, @intFromFloat(io.MousePos.y)));
             } else {
-                _ = sdl.SDL_WarpMouseInWindow(window, @intFromFloat(c_int, io.MousePos.x), @intFromFloat(c_int, io.MousePos.y));
+                _ = sdl.SDL_WarpMouseInWindow(window, @as(c_int, @intFromFloat(io.MousePos.x)), @as(c_int, @intFromFloat(io.MousePos.y)));
             }
         }
 
@@ -137,13 +137,13 @@ pub const Events = struct {
 
         if (io.ConfigFlags & imgui.ImGuiConfigFlags_ViewportsEnable != 0) {
             std.log.warn("viewports not implemented\n", .{});
-        } else if (sdl.SDL_GetWindowFlags(window) | @intCast(u32, @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS)) != 1) {
+        } else if (sdl.SDL_GetWindowFlags(window) | @as(u32, @intCast(@intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_INPUT_FOCUS))) != 1) {
             var win_x: i32 = undefined;
             var win_y: i32 = undefined;
             sdl.SDL_GetWindowPosition(window, &win_x, &win_y);
             io.MousePos = imgui.ImVec2{
-                .x = @floatFromInt(f32, mouse_x_global - win_x),
-                .y = @floatFromInt(f32, mouse_y_global - win_y),
+                .x = @as(f32, @floatFromInt(mouse_x_global - win_x)),
+                .y = @as(f32, @floatFromInt(mouse_y_global - win_y)),
             };
         }
 
@@ -153,7 +153,7 @@ pub const Events = struct {
             if (io.MouseDrawCursor or cursor == imgui.ImGuiMouseCursor_None) {
                 _ = sdl.SDL_ShowCursor(sdl.SDL_FALSE);
             } else {
-                sdl.SDL_SetCursor(self.mouse_cursors[@intCast(usize, cursor)] orelse self.mouse_cursors[@intCast(usize, imgui.ImGuiMouseCursor_Arrow)].?);
+                sdl.SDL_SetCursor(self.mouse_cursors[@as(usize, @intCast(cursor))] orelse self.mouse_cursors[@as(usize, @intCast(imgui.ImGuiMouseCursor_Arrow))].?);
                 _ = sdl.SDL_ShowCursor(sdl.SDL_TRUE);
             }
         }
@@ -191,7 +191,7 @@ pub const Events = struct {
             sdl.SDL_KEYDOWN, sdl.SDL_KEYUP => {
                 const io = imgui.igGetIO();
                 const mod_state = @intFromEnum(sdl.SDL_GetModState());
-                io.KeysDown[@intCast(usize, @intFromEnum(event.key.keysym.scancode))] = event.type == sdl.SDL_KEYDOWN;
+                io.KeysDown[@as(usize, @intCast(@intFromEnum(event.key.keysym.scancode)))] = event.type == sdl.SDL_KEYDOWN;
                 io.KeyShift = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_SHIFT)) != 0;
                 io.KeyCtrl = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_CTRL)) != 0;
                 io.KeyAlt = (mod_state & @intFromEnum(sdl.SDL_Keymod.KMOD_ALT)) != 0;
@@ -200,7 +200,7 @@ pub const Events = struct {
             },
             sdl.SDL_WINDOWEVENT => {
                 // TODO: should this return true?
-                const event_type = @enumFromInt(sdl.SDL_WindowEventID, event.window.event);
+                const event_type = @as(sdl.SDL_WindowEventID, @enumFromInt(event.window.event));
                 if (event_type == .SDL_WINDOWEVENT_CLOSE or event_type == .SDL_WINDOWEVENT_MOVED or event_type == .SDL_WINDOWEVENT_RESIZED) {
                     if (imgui.igFindViewportByPlatformHandle(sdl.SDL_GetWindowFromID(event.window.windowID))) |viewport| {
                         if (event_type == .SDL_WINDOWEVENT_CLOSE) viewport.PlatformRequestClose = true;

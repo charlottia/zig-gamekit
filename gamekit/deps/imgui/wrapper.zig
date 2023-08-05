@@ -27,7 +27,7 @@ extern fn _ogListBoxHeaderVec2(label: [*c]const u8, size: *const imgui.ImVec2) b
 pub fn ogImage(texture: imgui.ImTextureID, width: i32, height: i32) void {
     const white = imgui.ImVec4{ .x = 1, .y = 1, .z = 1, .w = 1 };
     _ = white;
-    var size = imgui.ImVec2{ .x = @floatFromInt(f32, width), .y = @floatFromInt(f32, height) };
+    var size = imgui.ImVec2{ .x = @as(f32, @floatFromInt(width)), .y = @as(f32, @floatFromInt(height)) };
     // TODO: remove when windows can handle passing imgui.ImVec4s and arm can handle imgui.ImVec2s
     // igImage(texture, size, imgui.ImVec2{}, imgui.ImVec2{ .x = 1, .y = 1 }, white, .{});
     _ogImage(texture, &size, &imgui.ImVec2{}, &imgui.ImVec2{ .x = 1, .y = 1 });
@@ -130,7 +130,7 @@ pub fn ogColoredButtonEx(color: imgui.ImU32, label: [:0]const u8, size: imgui.Im
 }
 
 pub fn ogPushIDUsize(id: usize) void {
-    imgui.igPushIDInt(@intCast(c_int, id));
+    imgui.igPushIDInt(@as(c_int, @intCast(id)));
 }
 
 /// helper to shorten disabling controls via ogPushDisabled; defer ogPopDisabled; due to defer not working inside the if block.

@@ -324,7 +324,7 @@ pub inline fn SDL_memcpy4(arg_dst: ?*anyopaque, arg_src: ?*const anyopaque, arg_
     var dst = arg_dst;
     var src = arg_src;
     var dwords = arg_dwords;
-    return SDL_memcpy(dst, src, dwords *% @bitCast(c_ulong, @as(c_long, @as(c_int, 4))));
+    return SDL_memcpy(dst, src, dwords *% @as(c_ulong, @bitCast(@as(c_long, @as(c_int, 4)))));
 }
 pub const SDL_main_func = ?fn (c_int, [*c][*c]u8) callconv(.C) c_int;
 pub extern fn SDL_main(argc: c_int, argv: [*c][*c]u8) c_int;
@@ -901,16 +901,16 @@ pub const SDL_FRect = struct_SDL_FRect;
 pub inline fn SDL_PointInRect(arg_p: [*c]const SDL_Point, arg_r: [*c]const SDL_Rect) SDL_bool {
     var p = arg_p;
     var r = arg_r;
-    return @bitCast(c_uint, if ((((p.*.x >= r.*.x) and (p.*.x < (r.*.x + r.*.w))) and (p.*.y >= r.*.y)) and (p.*.y < (r.*.y + r.*.h))) SDL_TRUE else SDL_FALSE);
+    return @as(c_uint, @bitCast(if ((((p.*.x >= r.*.x) and (p.*.x < (r.*.x + r.*.w))) and (p.*.y >= r.*.y)) and (p.*.y < (r.*.y + r.*.h))) SDL_TRUE else SDL_FALSE));
 }
 pub inline fn SDL_RectEmpty(arg_r: [*c]const SDL_Rect) SDL_bool {
     var r = arg_r;
-    return @bitCast(c_uint, if ((!(r != null) or (r.*.w <= @as(c_int, 0))) or (r.*.h <= @as(c_int, 0))) SDL_TRUE else SDL_FALSE);
+    return @as(c_uint, @bitCast(if ((!(r != null) or (r.*.w <= @as(c_int, 0))) or (r.*.h <= @as(c_int, 0))) SDL_TRUE else SDL_FALSE));
 }
 pub inline fn SDL_RectEquals(arg_a: [*c]const SDL_Rect, arg_b: [*c]const SDL_Rect) SDL_bool {
     var a = arg_a;
     var b = arg_b;
-    return @bitCast(c_uint, if ((((((a != null) and (b != null)) and (a.*.x == b.*.x)) and (a.*.y == b.*.y)) and (a.*.w == b.*.w)) and (a.*.h == b.*.h)) SDL_TRUE else SDL_FALSE);
+    return @as(c_uint, @bitCast(if ((((((a != null) and (b != null)) and (a.*.x == b.*.x)) and (a.*.y == b.*.y)) and (a.*.w == b.*.w)) and (a.*.h == b.*.h)) SDL_TRUE else SDL_FALSE));
 }
 pub extern fn SDL_HasIntersection(A: [*c]const SDL_Rect, B: [*c]const SDL_Rect) SDL_bool;
 pub extern fn SDL_IntersectRect(A: [*c]const SDL_Rect, B: [*c]const SDL_Rect, result: [*c]SDL_Rect) SDL_bool;

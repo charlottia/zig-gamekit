@@ -57,7 +57,7 @@ pub const Window = struct {
         _ = sdl.SDL_GL_SetAttribute(.SDL_GL_STENCIL_SIZE, 8);
 
         var window_flags = flags | @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_OPENGL);
-        self.sdl_window = sdl.SDL_CreateWindow(config.title, sdl.SDL_WINDOWPOS_UNDEFINED, sdl.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, @bitCast(u32, window_flags)) orelse {
+        self.sdl_window = sdl.SDL_CreateWindow(config.title, sdl.SDL_WINDOWPOS_UNDEFINED, sdl.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, @as(u32, @bitCast(window_flags))) orelse {
             sdl.SDL_Log("Unable to create window: %s", sdl.SDL_GetError());
             @panic("no window");
         };
@@ -81,7 +81,7 @@ pub const Window = struct {
     pub fn scale(self: Window) f32 {
         var wx = self.width();
         const draw_size = self.drawableSize();
-        return @floatFromInt(f32, draw_size.w) / @floatFromInt(f32, wx);
+        return @as(f32, @floatFromInt(draw_size.w)) / @as(f32, @floatFromInt(wx));
     }
 
     pub fn width(self: Window) i32 {
@@ -131,7 +131,7 @@ pub const Window = struct {
     }
 
     pub fn resizable(self: Window) bool {
-        return (sdl.SDL_GetWindowFlags(self.sdl_window) & @intCast(u32, @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_RESIZABLE))) != 0;
+        return (sdl.SDL_GetWindowFlags(self.sdl_window) & @as(u32, @intCast(@intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_RESIZABLE)))) != 0;
     }
 
     pub fn setResizable(self: Window, new_resizable: bool) void {

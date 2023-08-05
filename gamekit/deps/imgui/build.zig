@@ -27,7 +27,7 @@ pub fn linkArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: std.zig.
         exe.linkSystemLibrary("gdi32");
     } else if (target.isDarwin()) {
         const frameworks_dir = macosFrameworksDir(b) catch unreachable;
-        exe.addFrameworkPath(frameworks_dir);
+        exe.addFrameworkPath(.{ .path = frameworks_dir });
         exe.linkFramework("Foundation");
         exe.linkFramework("Cocoa");
         exe.linkFramework("Quartz");
@@ -44,16 +44,16 @@ pub fn linkArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: std.zig.
     }
 
     const base_path = prefix_path ++ "gamekit/deps/imgui/";
-    exe.addIncludePath(base_path ++ "cimgui/imgui");
-    exe.addIncludePath(base_path ++ "cimgui/imgui/examples");
+    exe.addIncludePath(.{ .path = base_path ++ "cimgui/imgui" });
+    exe.addIncludePath(.{ .path = base_path ++ "cimgui/imgui/examples" });
 
     const cpp_args = [_][]const u8{"-Wno-return-type-c-linkage"};
-    exe.addCSourceFile(base_path ++ "cimgui/imgui/imgui.cpp", &cpp_args);
-    exe.addCSourceFile(base_path ++ "cimgui/imgui/imgui_demo.cpp", &cpp_args);
-    exe.addCSourceFile(base_path ++ "cimgui/imgui/imgui_draw.cpp", &cpp_args);
-    exe.addCSourceFile(base_path ++ "cimgui/imgui/imgui_widgets.cpp", &cpp_args);
-    exe.addCSourceFile(base_path ++ "cimgui/cimgui.cpp", &cpp_args);
-    exe.addCSourceFile(base_path ++ "temporary_hacks.cpp", &cpp_args);
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "cimgui/imgui/imgui.cpp" }, .flags = &cpp_args });
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "cimgui/imgui/imgui_demo.cpp" }, .flags = &cpp_args });
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "cimgui/imgui/imgui_draw.cpp" }, .flags = &cpp_args });
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "cimgui/imgui/imgui_widgets.cpp" }, .flags = &cpp_args });
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "cimgui/cimgui.cpp" }, .flags = &cpp_args });
+    exe.addCSourceFile(.{ .file = .{ .path = base_path ++ "temporary_hacks.cpp" }, .flags = &cpp_args });
 }
 
 /// helper function to get SDK path on Mac

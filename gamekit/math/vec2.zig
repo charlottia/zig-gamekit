@@ -293,7 +293,7 @@ fn VecCommonFns(comptime S: usize, comptime T: type, comptime This: type) type {
 
             comptime var i = 0;
             inline while (i < S) : (i += 1) {
-                res.getFieldMut(i).* = @floatFromInt(F, self.getField(i));
+                res.getFieldMut(i).* = @as(F, @floatFromInt(self.getField(i)));
             }
 
             return res;
@@ -304,7 +304,7 @@ fn VecCommonFns(comptime S: usize, comptime T: type, comptime This: type) type {
 
             comptime var i = 0;
             inline while (i < S) : (i += 1) {
-                res.getFieldMut(i).* = @intFromFloat(I, self.getField(i));
+                res.getFieldMut(i).* = @as(I, @intFromFloat(self.getField(i)));
             }
 
             return res;
@@ -315,7 +315,7 @@ fn VecCommonFns(comptime S: usize, comptime T: type, comptime This: type) type {
 
             comptime var i = 0;
             inline while (i < S) : (i += 1) {
-                res.getFieldMut(i).* = @floatCast(F, self.getField(i));
+                res.getFieldMut(i).* = @as(F, @floatCast(self.getField(i)));
             }
 
             return res;
@@ -326,7 +326,7 @@ fn VecCommonFns(comptime S: usize, comptime T: type, comptime This: type) type {
 
             comptime var i = 0;
             inline while (i < S) : (i += 1) {
-                res.getFieldMut(i).* = @intCast(I, self.getField(i));
+                res.getFieldMut(i).* = @as(I, @intCast(self.getField(i)));
             }
 
             return res;

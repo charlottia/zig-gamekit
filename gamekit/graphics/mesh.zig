@@ -16,7 +16,7 @@ pub const Mesh = struct {
 
         return .{
             .bindings = renderkit.BufferBindings.init(ibuffer, &[_]renderkit.Buffer{vbuffer}),
-            .element_count = @intCast(c_int, indices.len),
+            .element_count = @as(c_int, @intCast(indices.len)),
         };
     }
 
@@ -52,13 +52,13 @@ pub fn DynamicMesh(comptime IndexT: type, comptime VertT: type) type {
             });
             var vertex_buffer = renderkit.createBuffer(VertT, .{
                 .usage = .stream,
-                .size = @intCast(c_long, vertex_count * @sizeOf(VertT)),
+                .size = @as(c_long, @intCast(vertex_count * @sizeOf(VertT))),
             });
 
             return Self{
                 .bindings = renderkit.BufferBindings.init(ibuffer, &[_]renderkit.Buffer{vertex_buffer}),
                 .verts = try allocator.alloc(VertT, vertex_count),
-                .element_count = @intCast(c_int, indices.len),
+                .element_count = @as(c_int, @intCast(indices.len)),
                 .allocator = allocator,
             };
         }
@@ -102,7 +102,7 @@ pub fn DynamicMesh(comptime IndexT: type, comptime VertT: type) type {
         }
 
         pub fn drawAllVerts(self: Self) void {
-            self.draw(0, @intCast(c_int, self.element_count));
+            self.draw(0, @as(c_int, @intCast(self.element_count)));
         }
     };
 }

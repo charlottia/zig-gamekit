@@ -53,7 +53,7 @@ pub const Time = struct {
 
     pub fn seconds(self: Time) f32 {
         _ = self;
-        return @floatFromInt(f32, sdl.SDL_GetTicks()) / 1000;
+        return @as(f32, @floatFromInt(sdl.SDL_GetTicks())) / 1000;
     }
 
     pub fn fps(self: Time) u32 {
@@ -80,25 +80,25 @@ pub const Time = struct {
         const n = self.now();
 
         const curr_dt: f64 = if (tmp.* != 0) {
-            @floatFromInt(f64, ((n - tmp.*) * 1000.0) / @floatFromInt(f64, sdl.SDL_GetPerformanceFrequency()));
+            @as(f64, @floatFromInt(((n - tmp.*) * 1000.0) / @as(f64, @floatFromInt(sdl.SDL_GetPerformanceFrequency()))));
         } else 0;
         return curr_dt;
     }
 
     pub fn toSeconds(self: Time, perf_counter_time: u64) f64 {
         _ = self;
-        return @floatFromInt(f64, perf_counter_time) / @floatFromInt(f64, sdl.SDL_GetPerformanceFrequency());
+        return @as(f64, @floatFromInt(perf_counter_time)) / @as(f64, @floatFromInt(sdl.SDL_GetPerformanceFrequency()));
     }
 
     pub fn toMs(self: Time, perf_counter_time: u64) f64 {
         _ = self;
-        return @floatFromInt(f64, perf_counter_time) * 1000 / @floatFromInt(f64, sdl.SDL_GetPerformanceFrequency());
+        return @as(f64, @floatFromInt(perf_counter_time)) * 1000 / @as(f64, @floatFromInt(sdl.SDL_GetPerformanceFrequency()));
     }
 
     /// forces a resync of the timing code. Useful after some slower operations such as level loads or window resizes
     pub fn resync(self: *Time) void {
         self.timestep.resync = true;
-        self.timestep.prev_frame_time = sdl.SDL_GetPerformanceCounter() + @intFromFloat(u64, self.timestep.fixed_deltatime);
+        self.timestep.prev_frame_time = sdl.SDL_GetPerformanceCounter() + @as(u64, @intFromFloat(self.timestep.fixed_deltatime));
     }
 
     // converted from Tyler Glaiel's: https://github.com/TylerGlaiel/FrameTimingControl/blob/master/frame_timer.cpp
@@ -119,8 +119,8 @@ pub const Time = struct {
 
         pub fn init(update_rate: f64) Timestep {
             var timestep = Timestep{
-                .fixed_deltatime = 1 / @floatCast(f32, update_rate),
-                .desired_frametime = @intFromFloat(i32, @floatFromInt(f64, sdl.SDL_GetPerformanceFrequency()) / update_rate),
+                .fixed_deltatime = 1 / @as(f32, @floatCast(update_rate)),
+                .desired_frametime = @as(i32, @intFromFloat(@as(f64, @floatFromInt(sdl.SDL_GetPerformanceFrequency())) / update_rate)),
                 .vsync_maxerror = sdl.SDL_GetPerformanceFrequency() / 5000,
                 .prev_frame_time = sdl.SDL_GetPerformanceCounter(),
             };
@@ -129,7 +129,7 @@ pub const Time = struct {
             // utils.ring_buffer_fill(&timestep.time_averager, timestep.desired_frametime);
             timestep.time_averager = [samples_for_avg]i32{ timestep.desired_frametime, timestep.desired_frametime, timestep.desired_frametime, timestep.desired_frametime, timestep.desired_frametime };
 
-            const time_60hz = @intFromFloat(i32, @floatFromInt(f64, sdl.SDL_GetPerformanceFrequency()) / 60);
+            const time_60hz = @as(i32, @intFromFloat(@as(f64, @floatFromInt(sdl.SDL_GetPerformanceFrequency())) / 60));
             timestep.snap_frequencies[0] = time_60hz; // 60fps
             timestep.snap_frequencies[1] = time_60hz * 2; // 30fps
             timestep.snap_frequencies[2] = time_60hz * 3; // 20fps
@@ -142,8 +142,8 @@ pub const Time = struct {
         pub fn tick(self: *Timestep) void {
             // frame timer
             const current_frame_time = sdl.SDL_GetPerformanceCounter();
-            const delta_u32 = @truncate(u32, current_frame_time - self.prev_frame_time);
-            var delta_time = @intCast(i32, delta_u32);
+            const delta_u32 = @as(u32, @truncate(current_frame_time - self.prev_frame_time));
+            var delta_time = @as(i32, @intCast(delta_u32));
             self.prev_frame_time = current_frame_time;
 
             // handle unexpected timer anomalies (overflow, extra slow frames, etc)
@@ -168,7 +168,7 @@ pub const Time = struct {
 
             self.time_averager[samples_for_avg - 1] = delta_time;
             delta_time = @divTrunc(dt_avg, samples_for_avg);
-            self.raw_deltatime = @floatFromInt(f32, delta_u32) / @floatFromInt(f32, sdl.SDL_GetPerformanceFrequency());
+            self.raw_deltatime = @as(f32, @floatFromInt(delta_u32)) / @as(f32, @floatFromInt(sdl.SDL_GetPerformanceFrequency()));
 
             // add to the accumulator
             self.frame_accumulator += delta_time;
@@ -180,8 +180,8 @@ pub const Time = struct {
             if (@import("builtin").os.tag == .macos and @import("builtin").target.cpu.arch == std.Target.Cpu.Arch.x86_64) {
                 const elapsed = self.desired_frametime - delta_time;
                 if (elapsed > 0) {
-                    const diff = @floatFromInt(f32, elapsed) / @floatFromInt(f32, sdl.SDL_GetPerformanceFrequency());
-                    std.time.sleep(@intFromFloat(u64, diff * 1000000000));
+                    const diff = @as(f32, @floatFromInt(elapsed)) / @as(f32, @floatFromInt(sdl.SDL_GetPerformanceFrequency()));
+                    std.time.sleep(@as(u64, @intFromFloat(diff * 1000000000)));
                 }
             }
 
