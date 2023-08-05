@@ -10,7 +10,7 @@ pub fn linkArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: std.zig.
     _ = target;
     if (prefix_path.len > 0 and !std.mem.endsWith(u8, prefix_path, "/")) @panic("prefix-path must end with '/' if it is not empty");
     exe.linkSystemLibrary("c");
-    exe.linkSystemLibrary("sdl2");
+    exe.linkSystemLibrary("SDL2");
 
     if (builtin.os.tag == .windows) {
         exe.linkSystemLibraryName("SDL2");
