@@ -15,7 +15,7 @@ pub fn FixedList(comptime T: type, comptime len: usize) type {
 
             pub fn next(self: *Iterator) ?T {
                 if (self.index == self.list.len) return null;
-                var next_item = self.list.items[self.index];
+                const next_item = self.list.items[self.index];
                 self.index += 1;
                 return next_item;
             }
@@ -43,7 +43,7 @@ pub fn FixedList(comptime T: type, comptime len: usize) type {
         }
 
         pub fn pop(self: *Self) T {
-            var item = self.items[self.len - 1];
+            const item = self.items[self.len - 1];
             self.len -= 1;
             return item;
         }

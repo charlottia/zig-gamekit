@@ -11,11 +11,11 @@ pub const VertexParams = extern struct {
         .images = .{"main_tex"},
     };
 
-    transform_matrix: [8]f32 = [_]f32{0} ** 8,
+    transform_matrix: [6]f32 = [_]f32{0} ** 6,
 
     pub fn init(mat: *math.Mat32) VertexParams {
         var params = VertexParams{};
-        std.mem.copy(f32, &params.transform_matrix, &mat.data);
+        @memcpy(&params.transform_matrix, &mat.data);
         return params;
     }
 };

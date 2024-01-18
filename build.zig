@@ -1,8 +1,7 @@
 const std = @import("std");
 const builtin = @import("builtin");
 
-const LibExeObjStep = std.build.LibExeObjStep;
-const Builder = std.build.Builder;
+const Build = std.Build;
 const CrossTarget = std.zig.CrossTarget;
 
 const renderkit_build = @import("renderkit/build.zig");
@@ -10,7 +9,7 @@ const ShaderCompileStep = renderkit_build.ShaderCompileStep;
 
 var enable_imgui: ?bool = null;
 
-pub fn build(b: *Builder) !void {
+pub fn build(b: *Build) !void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
 
@@ -57,7 +56,7 @@ pub fn build(b: *Builder) !void {
     comple_shaders_step.dependOn(&res.step);
 }
 
-fn createExe(b: *Builder, target: CrossTarget, optimize: std.builtin.Mode, name: []const u8, source: []const u8) *std.build.LibExeObjStep {
+fn createExe(b: *Build, target: CrossTarget, optimize: std.builtin.Mode, name: []const u8, source: []const u8) *Build.Step.Compile {
     const exe = b.addExecutable(.{
         .name = name,
         .root_source_file = .{ .path = source },
@@ -74,8 +73,8 @@ fn createExe(b: *Builder, target: CrossTarget, optimize: std.builtin.Mode, name:
     return exe;
 }
 
-/// adds gamekit, renderkit, stb and sdl packages to the LibExeObjStep
-pub fn addGameKitToArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: CrossTarget, comptime prefix_path: []const u8) void {
+/// adds gamekit, renderkit, stb and sdl packages to the Build.Step.Compile
+pub fn addGameKitToArtifact(b: *Build, exe: *Build.Step.Compile, target: Build.ResolvedTarget, comptime prefix_path: []const u8) void {
     if (prefix_path.len > 0 and !std.mem.endsWith(u8, prefix_path, "/")) @panic("prefix-path must end with '/' if it is not empty");
 
     // only add the build option once!
@@ -83,26 +82,26 @@ pub fn addGameKitToArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: 
         enable_imgui = b.option(bool, "imgui", "enable imgui") orelse false;
 
     const exe_options = b.addOptions();
-    exe.addOptions("gamekit_build_options", exe_options);
+    exe.root_module.addOptions("gamekit_build_options", exe_options);
     exe_options.addOption(bool, "enable_imgui", enable_imgui.?);
 
     // sdl
     const sdl_builder = @import("gamekit/deps/sdl/build.zig");
     sdl_builder.linkArtifact(b, exe, target, prefix_path);
     const sdl_pkg = sdl_builder.getModule(b, prefix_path);
-    exe.addModule("sdl", sdl_pkg);
+    exe.root_module.addImport("sdl", sdl_pkg);
 
     // stb
     const stb_builder = @import("gamekit/deps/stb/build.zig");
     stb_builder.linkArtifact(b, exe, target, prefix_path);
     const stb_pkg = stb_builder.getModule(b, prefix_path);
-    exe.addModule("stb", stb_pkg);
+    exe.root_module.addImport("stb", stb_pkg);
 
     // fontstash
     const fontstash_build = @import("gamekit/deps/fontstash/build.zig");
     fontstash_build.linkArtifact(b, exe, target, prefix_path);
     const fontstash_pkg = fontstash_build.getModule(b, prefix_path);
-    exe.addModule("stb", fontstash_pkg);
+    exe.root_module.addImport("stb", fontstash_pkg);
 
     // renderkit
     renderkit_build.addRenderKitToArtifact(b, exe, target, prefix_path ++ "renderkit/");
@@ -112,13 +111,13 @@ pub fn addGameKitToArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: 
     const imgui_builder = @import("gamekit/deps/imgui/build.zig");
     imgui_builder.linkArtifact(b, exe, target, prefix_path);
     const imgui_pkg = imgui_builder.getModule(b, prefix_path);
-    exe.addModule("imgui", imgui_pkg);
+    exe.root_module.addImport("imgui", imgui_pkg);
 
     // gamekit
     //CreateModuleOptions
     const gamekit_module = b.createModule(.{
-        .source_file = .{ .path = prefix_path ++ "gamekit/gamekit.zig" },
-        .dependencies = &.{
+        .root_source_file = .{ .path = prefix_path ++ "gamekit/gamekit.zig" },
+        .imports = &.{
             .{ .name = "renderkit", .module = renderkit_pkg },
             .{ .name = "sdl", .module = sdl_pkg },
             .{ .name = "fontstash", .module = fontstash_pkg },
@@ -126,5 +125,5 @@ pub fn addGameKitToArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: 
             .{ .name = "stb", .module = stb_pkg },
         },
     });
-    exe.addModule("gamekit", gamekit_module);
+    exe.root_module.addImport("gamekit", gamekit_module);
 }

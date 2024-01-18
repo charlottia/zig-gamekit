@@ -36,7 +36,7 @@ pub fn Vec(comptime S: usize, comptime T: type) type {
             }
 
             pub fn angleBetween(self: Vec2, to: Vec2) f32 {
-                return math.atan2(f32, to.y - self.y, to.x - self.x);
+                return math.atan2(to.y - self.y, to.x - self.x);
             }
 
             pub fn sub(self: @This(), x: T, y: T) @This() {

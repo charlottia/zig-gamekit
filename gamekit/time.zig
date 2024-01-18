@@ -75,7 +75,7 @@ pub const Time = struct {
 
     /// returns the time in milliseconds since the last call
     pub fn laptime(self: Time, last_time: *f64) f64 {
-        var tmp = last_time;
+        const tmp = last_time;
         // now
         const n = self.now();
 

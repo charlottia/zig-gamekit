@@ -25,7 +25,7 @@ pub const OffscreenPass = struct {
         pass.color_texture3 = if (tex_cnt > 2) gfx.Texture.initOffscreen(width, height, .nearest, .clamp) else null;
         pass.color_texture4 = if (tex_cnt > 3) gfx.Texture.initOffscreen(width, height, .nearest, .clamp) else null;
 
-        var desc = rk.PassDesc{
+        const desc = rk.PassDesc{
             .color_img = pass.color_texture.img,
             .color_img2 = if (pass.color_texture2) |t| t.img else null,
             .color_img3 = if (pass.color_texture3) |t| t.img else null,

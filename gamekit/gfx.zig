@@ -93,7 +93,7 @@ pub fn setRenderState(renderstate: renderkit.RenderState) void {
 
 pub fn beginPass(config: PassConfig) void {
     var proj_mat: math.Mat32 = math.Mat32.init();
-    var clear_command = config.asClearCommand();
+    const clear_command = config.asClearCommand();
     draw.batcher.begin();
 
     if (config.pass) |pass| {

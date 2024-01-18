@@ -1,11 +1,11 @@
 const builtin = @import("builtin");
 const std = @import("std");
-const Builder = std.build.Builder;
+const Build = std.Build;
 
 var framework_dir: ?[]u8 = null;
 const build_impl_type: enum { exe, static_lib, object_files } = .static_lib;
 
-pub fn build(b: *std.build.Builder) !void {
+pub fn build(b: *Build) !void {
     const target = b.standardTargetOptions(.{});
     const exe = b.addStaticLibrary(.{
         .name = "JunkLib",
@@ -17,18 +17,20 @@ pub fn build(b: *std.build.Builder) !void {
 }
 
 /// prefix_path is used to add package paths. It should be the the same path used to include this build file
-pub fn linkArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: std.zig.CrossTarget, comptime prefix_path: []const u8) void {
+pub fn linkArtifact(b: *Build, exe: *Build.Step.Compile, target: Build.ResolvedTarget, comptime prefix_path: []const u8) void {
     if (prefix_path.len > 0 and !std.mem.endsWith(u8, prefix_path, "/")) @panic("prefix-path must end with '/' if it is not empty");
 
     exe.linkLibCpp();
 
-    if (target.isWindows()) {
+    if (target.result.os.tag == .windows) {
         exe.linkSystemLibrary("user32");
         exe.linkSystemLibrary("gdi32");
-    } else if (target.isDarwin()) {
+    } else if (target.result.os.tag.isDarwin()) {
         const frameworks_dir = macosFrameworksDir(b) catch unreachable;
         exe.addFrameworkPath(.{ .path = frameworks_dir });
         exe.linkFramework("Foundation");
+        exe.linkFramework("QuickLook");
+        exe.linkFramework("QuickLookUI");
         exe.linkFramework("Cocoa");
         exe.linkFramework("Quartz");
         exe.linkFramework("QuartzCore");
@@ -57,10 +59,10 @@ pub fn linkArtifact(b: *Builder, exe: *std.build.LibExeObjStep, target: std.zig.
 }
 
 /// helper function to get SDK path on Mac
-fn macosFrameworksDir(b: *Builder) ![]u8 {
+fn macosFrameworksDir(b: *Build) ![]u8 {
     if (framework_dir) |dir| return dir;
 
-    var str = b.exec(&[_][]const u8{ "xcrun", "--show-sdk-path" });
+    var str = b.run(&[_][]const u8{ "xcrun", "--show-sdk-path" });
     const strip_newline = std.mem.lastIndexOf(u8, str, "\n");
     if (strip_newline) |index| {
         str = str[0..index];
@@ -69,9 +71,9 @@ fn macosFrameworksDir(b: *Builder) ![]u8 {
     return framework_dir.?;
 }
 
-pub fn getModule(b: *std.Build, comptime prefix_path: []const u8) *std.build.Module {
+pub fn getModule(b: *Build, comptime prefix_path: []const u8) *Build.Module {
     if (prefix_path.len > 0 and !std.mem.endsWith(u8, prefix_path, "/")) @panic("prefix-path must end with '/' if it is not empty");
     return b.createModule(.{
-        .source_file = .{ .path = prefix_path ++ "gamekit/deps/imgui/imgui.zig" },
+        .root_source_file = .{ .path = prefix_path ++ "gamekit/deps/imgui/imgui.zig" },
     });
 }

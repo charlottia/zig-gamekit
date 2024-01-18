@@ -1,6 +1,6 @@
 [submodule "renderkit"]
 	path = renderkit
-	url = https://github.com/charlottia/zig-renderkit
+	url = https://hrzn.ee/kivikakk/zig-renderkit.git
 [submodule "gamekit/deps/imgui/cimgui"]
 	path = gamekit/deps/imgui/cimgui
 	url = https://github.com/cimgui/cimgui.git

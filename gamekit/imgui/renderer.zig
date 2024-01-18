@@ -15,13 +15,13 @@ pub const Renderer = struct {
     pub fn init(docking: bool, viewports: bool, icon_font: bool) Renderer {
         const max_verts = 16384;
         const index_buffer_size = @as(c_long, @intCast(max_verts * 3 * @sizeOf(u16)));
-        var ibuffer = rk.createBuffer(u16, .{
+        const ibuffer = rk.createBuffer(u16, .{
             .type = .index,
             .usage = .stream,
             .size = index_buffer_size,
         });
         const vert_buffer_size = @as(c_long, @intCast(max_verts * @sizeOf(gfx.Vertex)));
-        var vertex_buffer = rk.createBuffer(gfx.Vertex, .{
+        const vertex_buffer = rk.createBuffer(gfx.Vertex, .{
             .usage = .stream,
             .size = vert_buffer_size,
         });
@@ -45,7 +45,7 @@ pub const Renderer = struct {
             icons_config[0].PixelSnapH = true;
             icons_config[0].FontDataOwnedByAtlas = false;
 
-            var data = @embedFile("assets/" ++ imgui.icons.font_icon_filename_fas);
+            const data = @embedFile("assets/" ++ imgui.icons.font_icon_filename_fas);
             _ = imgui.ImFontAtlas_AddFontFromMemoryTTF(io.Fonts, data, data.len, 13, icons_config, &font_awesome_range[0]);
         }
 
@@ -87,7 +87,7 @@ pub const Renderer = struct {
         var tex_id = imgui.igGetIO().Fonts.TexID;
         self.bindings.images[0] = @as(rk.Image, @intCast(@intFromPtr(tex_id)));
 
-        var fb_scale = draw_data.FramebufferScale;
+        const fb_scale = draw_data.FramebufferScale;
         imgui.ogImDrawData_ScaleClipRects(draw_data, fb_scale);
         const width = @as(i32, @intFromFloat(draw_data.DisplaySize.x * fb_scale.x));
         const height = @as(i32, @intFromFloat(draw_data.DisplaySize.y * fb_scale.y));
@@ -149,7 +149,7 @@ pub const Renderer = struct {
             rk.destroyBuffer(self.bindings.index_buffer);
 
             self.index_buffer_size = @as(c_long, @intFromFloat(@as(f32, @floatFromInt(draw_data.TotalIdxCount)) * 1.5));
-            var ibuffer = rk.createBuffer(u16, .{
+            const ibuffer = rk.createBuffer(u16, .{
                 .type = .index,
                 .usage = .stream,
                 .size = self.index_buffer_size,
@@ -161,7 +161,7 @@ pub const Renderer = struct {
             rk.destroyBuffer(self.bindings.vert_buffers[0]);
 
             self.vert_buffer_size = @as(c_long, @intFromFloat(@as(f32, @floatFromInt(draw_data.TotalVtxCount)) * 1.5));
-            var vertex_buffer = rk.createBuffer(gfx.Vertex, .{
+            const vertex_buffer = rk.createBuffer(gfx.Vertex, .{
                 .usage = .stream,
                 .size = self.vert_buffer_size,
             });

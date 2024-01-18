@@ -321,9 +321,9 @@ pub extern fn SDL_iconv_close(cd: SDL_iconv_t) c_int;
 pub extern fn SDL_iconv(cd: SDL_iconv_t, inbuf: [*c][*c]const u8, inbytesleft: [*c]usize, outbuf: [*c][*c]u8, outbytesleft: [*c]usize) usize;
 pub extern fn SDL_iconv_string(tocode: [*c]const u8, fromcode: [*c]const u8, inbuf: [*c]const u8, inbytesleft: usize) [*c]u8;
 pub inline fn SDL_memcpy4(arg_dst: ?*anyopaque, arg_src: ?*const anyopaque, arg_dwords: usize) ?*anyopaque {
-    var dst = arg_dst;
-    var src = arg_src;
-    var dwords = arg_dwords;
+    const dst = arg_dst;
+    const src = arg_src;
+    const dwords = arg_dwords;
     return SDL_memcpy(dst, src, dwords *% @as(c_ulong, @bitCast(@as(c_long, @as(c_int, 4)))));
 }
 pub const SDL_main_func = ?fn (c_int, [*c][*c]u8) callconv(.C) c_int;
@@ -398,7 +398,7 @@ const enum_unnamed_18 = enum(c_int) {
 pub const SDL_errorcode = enum_unnamed_18;
 pub extern fn SDL_Error(code: SDL_errorcode) c_int;
 pub inline fn SDL_SwapFloat(arg_x: f32) f32 {
-    var x = arg_x;
+    const x = arg_x;
     const union_unnamed_8 = extern union {
         f: f32,
         ui32: Uint32,
@@ -899,17 +899,17 @@ pub const struct_SDL_FRect = extern struct {
 };
 pub const SDL_FRect = struct_SDL_FRect;
 pub inline fn SDL_PointInRect(arg_p: [*c]const SDL_Point, arg_r: [*c]const SDL_Rect) SDL_bool {
-    var p = arg_p;
-    var r = arg_r;
+    const p = arg_p;
+    const r = arg_r;
     return @as(c_uint, @bitCast(if ((((p.*.x >= r.*.x) and (p.*.x < (r.*.x + r.*.w))) and (p.*.y >= r.*.y)) and (p.*.y < (r.*.y + r.*.h))) SDL_TRUE else SDL_FALSE));
 }
 pub inline fn SDL_RectEmpty(arg_r: [*c]const SDL_Rect) SDL_bool {
-    var r = arg_r;
+    const r = arg_r;
     return @as(c_uint, @bitCast(if ((!(r != null) or (r.*.w <= @as(c_int, 0))) or (r.*.h <= @as(c_int, 0))) SDL_TRUE else SDL_FALSE));
 }
 pub inline fn SDL_RectEquals(arg_a: [*c]const SDL_Rect, arg_b: [*c]const SDL_Rect) SDL_bool {
-    var a = arg_a;
-    var b = arg_b;
+    const a = arg_a;
+    const b = arg_b;
     return @as(c_uint, @bitCast(if ((((((a != null) and (b != null)) and (a.*.x == b.*.x)) and (a.*.y == b.*.y)) and (a.*.w == b.*.w)) and (a.*.h == b.*.h)) SDL_TRUE else SDL_FALSE));
 }
 pub extern fn SDL_HasIntersection(A: [*c]const SDL_Rect, B: [*c]const SDL_Rect) SDL_bool;
@@ -4102,7 +4102,7 @@ pub inline fn SDL_SaveBMP(surface: anytype, file: anytype) @TypeOf(SDL_SaveBMP_R
 }
 pub const SDL_BlitSurface = SDL_UpperBlit;
 pub const SDL_BlitScaled = SDL_UpperBlitScaled;
-pub const SDL_WINDOWPOS_UNDEFINED_MASK = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0x1FFF0000, .hexadecimal);
+pub const SDL_WINDOWPOS_UNDEFINED_MASK = @import("std").zig.c_translation.promoteIntLiteral(c_uint, 0x1FFF0000, .hex);
 pub inline fn SDL_WINDOWPOS_UNDEFINED_DISPLAY(X: anytype) @TypeOf(SDL_WINDOWPOS_UNDEFINED_MASK | X) {
     return SDL_WINDOWPOS_UNDEFINED_MASK | X;
 }

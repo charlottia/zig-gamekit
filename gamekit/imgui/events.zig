@@ -92,8 +92,8 @@ pub const Events = struct {
         self: *Events,
         window: *sdl.SDL_Window,
     ) void {
-        var win_size = gk.window.size();
-        var drawable_size = gk.window.drawableSize();
+        const win_size = gk.window.size();
+        const drawable_size = gk.window.drawableSize();
 
         const io = imgui.igGetIO();
         io.DisplaySize = imgui.ImVec2{ .x = @as(f32, @floatFromInt(win_size.w)), .y = @as(f32, @floatFromInt(win_size.h)) };

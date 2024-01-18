@@ -56,7 +56,7 @@ pub const Window = struct {
         _ = sdl.SDL_GL_SetAttribute(.SDL_GL_DEPTH_SIZE, 24);
         _ = sdl.SDL_GL_SetAttribute(.SDL_GL_STENCIL_SIZE, 8);
 
-        var window_flags = flags | @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_OPENGL);
+        const window_flags = flags | @intFromEnum(sdl.SDL_WindowFlags.SDL_WINDOW_OPENGL);
         self.sdl_window = sdl.SDL_CreateWindow(config.title, sdl.SDL_WINDOWPOS_UNDEFINED, sdl.SDL_WINDOWPOS_UNDEFINED, config.width, config.height, @as(u32, @bitCast(window_flags))) orelse {
             sdl.SDL_Log("Unable to create window: %s", sdl.SDL_GetError());
             @panic("no window");
@@ -79,7 +79,7 @@ pub const Window = struct {
 
     /// returns the drawable width / the window width. Used to scale mouse coords when the OS gives them to us in points.
     pub fn scale(self: Window) f32 {
-        var wx = self.width();
+        const wx = self.width();
         const draw_size = self.drawableSize();
         return @as(f32, @floatFromInt(draw_size.w)) / @as(f32, @floatFromInt(wx));
     }
@@ -112,8 +112,8 @@ pub const Window = struct {
     }
 
     pub fn position(self: Window) struct { x: c_int, y: c_int } {
-        var x: c_int = 0;
-        var y: c_int = 0;
+        const x: c_int = 0;
+        const y: c_int = 0;
         sdl.SDL_GetWindowPosition(self.sdl_window, x, y);
         return .{ .x = x, .y = y };
     }

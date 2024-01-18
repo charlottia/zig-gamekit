@@ -6,11 +6,11 @@ pub const Mesh = struct {
     element_count: c_int,
 
     pub fn init(comptime IndexT: type, indices: []IndexT, comptime VertT: type, verts: []VertT) Mesh {
-        var ibuffer = renderkit.createBuffer(IndexT, .{
+        const ibuffer = renderkit.createBuffer(IndexT, .{
             .type = .index,
             .content = indices,
         });
-        var vbuffer = renderkit.createBuffer(VertT, .{
+        const vbuffer = renderkit.createBuffer(VertT, .{
             .content = verts,
         });
 
@@ -46,11 +46,11 @@ pub fn DynamicMesh(comptime IndexT: type, comptime VertT: type) type {
         allocator: std.mem.Allocator,
 
         pub fn init(allocator: std.mem.Allocator, vertex_count: usize, indices: []IndexT) !Self {
-            var ibuffer = if (IndexT == void) @as(renderkit.Buffer, 0) else renderkit.createBuffer(IndexT, .{
+            const ibuffer = if (IndexT == void) @as(renderkit.Buffer, 0) else renderkit.createBuffer(IndexT, .{
                 .type = .index,
                 .content = indices,
             });
-            var vertex_buffer = renderkit.createBuffer(VertT, .{
+            const vertex_buffer = renderkit.createBuffer(VertT, .{
                 .usage = .stream,
                 .size = @as(c_long, @intCast(vertex_count * @sizeOf(VertT))),
             });

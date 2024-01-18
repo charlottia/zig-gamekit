@@ -42,21 +42,21 @@ pub const draw = struct {
     pub fn tex(texture: Texture, position: math.Vec2) void {
         quad.setFill(texture.width, texture.height);
 
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
     pub fn texScale(texture: Texture, position: math.Vec2, scale: f32) void {
         quad.setFill(texture.width, texture.height);
 
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = scale, .sy = scale });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = scale, .sy = scale });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
     pub fn texScaleXY(texture: Texture, position: math.Vec2, sx: f32, sy: f32) void {
         quad.setFill(texture.width, texture.height);
 
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
@@ -64,21 +64,21 @@ pub const draw = struct {
         quad.setFill(texture.width, texture.height);
         quad.setViewportRect(region);
 
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy, .angle = angle });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .sx = sx, .sy = sy, .angle = angle });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
     pub fn texScaleOrigin(texture: Texture, x: f32, y: f32, scale: f32, ox: f32, oy: f32) void {
         quad.setFill(texture.width, texture.height);
 
-        var mat = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = scale, .sy = scale, .ox = ox, .oy = oy });
+        const mat = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = scale, .sy = scale, .ox = ox, .oy = oy });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
     pub fn texScaleOriginRotation(texture: Texture, x: f32, y: f32, scale: f32, ox: f32, oy: f32, angle: f32) void {
         quad.setFill(texture.width, texture.height);
 
-        var mat = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = scale, .sy = scale, .ox = ox, .oy = oy, .angle = angle });
+        const mat = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = scale, .sy = scale, .ox = ox, .oy = oy, .angle = angle });
         batcher.draw(texture, quad, mat, math.Color.white);
     }
 
@@ -96,7 +96,7 @@ pub const draw = struct {
     pub fn text(str: []const u8, x: f32, y: f32, fb: ?*gfx.FontBook) void {
         var book = fb orelse fontbook;
         // TODO: dont hardcode scale as 4
-        var matrix = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = 2, .sy = 2 });
+        const matrix = math.Mat32.initTransform(.{ .x = x, .y = y, .sx = 2, .sy = 2 });
 
         var fons_quad = book.getQuad();
         var iter = book.getTextIterator(str);
@@ -117,7 +117,7 @@ pub const draw = struct {
 
     pub fn textOptions(str: []const u8, fb: ?*gfx.FontBook, options: struct { x: f32, y: f32, rot: f32 = 0, sx: f32 = 1, sy: f32 = 1, alignment: gfx.FontBook.Align = .default, color: math.Color = math.Color.white }) void {
         var book = fb orelse fontbook;
-        var matrix = math.Mat32.initTransform(.{ .x = options.x, .y = options.y, .angle = options.rot, .sx = options.sx, .sy = options.sy });
+        const matrix = math.Mat32.initTransform(.{ .x = options.x, .y = options.y, .angle = options.rot, .sx = options.sx, .sy = options.sy });
         book.setAlign(options.alignment);
 
         var fons_quad = book.getQuad();
@@ -141,7 +141,7 @@ pub const draw = struct {
         quad.setFill(size, size);
 
         const offset = if (size == 1) 0 else size * 0.5;
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .ox = offset, .oy = offset });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y, .ox = offset, .oy = offset });
         batcher.draw(white_tex, quad, mat, color);
     }
 
@@ -151,13 +151,13 @@ pub const draw = struct {
         const angle = start.angleBetween(end);
         const length = start.distance(end);
 
-        var mat = math.Mat32.initTransform(.{ .x = start.x, .y = start.y, .angle = angle, .sx = length, .sy = thickness });
+        const mat = math.Mat32.initTransform(.{ .x = start.x, .y = start.y, .angle = angle, .sx = length, .sy = thickness });
         batcher.draw(white_tex, quad, mat, color);
     }
 
     pub fn rect(position: math.Vec2, width: f32, height: f32, color: math.Color) void {
         quad.setFill(width, height);
-        var mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y });
+        const mat = math.Mat32.initTransform(.{ .x = position.x, .y = position.y });
         batcher.draw(white_tex, quad, mat, color);
     }
 
